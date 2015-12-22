@@ -1,12 +1,13 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
-set ROOT=c:\work\opensource\Torchlight2Save
-
+set ROOT=%~dp0
+set SAVE_PATH=%cd%
 set GAME_PATH=%USERPROFILE%\Documents\My Games\Runic Games\Torchlight 2\save
+
 
 if not exist "%GAME_PATH%" (
     echo can't find the game data store path.
-    call :ExitApp
+    goto :ExitApp
 )
 
 set restort_name=
@@ -22,13 +23,13 @@ for /f %%i in ('dir /b "%GAME_PATH%\*.restore"') do (
 cd /d %ROOT%
 echo Syncing files ...
 call git pull
-echo /S /Q %ROOT%\%restort_name%
-rmdir /S /Q %ROOT%\%restort_name%
-mkdir %ROOT%\%restort_name%
+echo /S /Q %ROOT%%restort_name%
+rmdir /S /Q %ROOT%%restort_name%
+mkdir %ROOT%%restort_name%
 echo.
 
 echo copy the new files ...
-xcopy /Y "%GAME_PATH%\*" %ROOT%\%restort_name%>nul
+xcopy /Y "%GAME_PATH%\*" %ROOT%%restort_name%>nul
 echo.
 
 call git add -u .
@@ -41,4 +42,5 @@ call git push origin master
 
 :ExitApp
 endlocal
+cd /d %SAVE_PATH%
 exit /b
