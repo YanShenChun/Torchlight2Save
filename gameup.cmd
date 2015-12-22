@@ -23,7 +23,6 @@ for /f %%i in ('dir /b "%GAME_PATH%\*.restore"') do (
 cd /d %ROOT%
 echo Syncing files ...
 call git pull
-echo /S /Q %ROOT%%restort_name%
 rmdir /S /Q %ROOT%%restort_name%
 mkdir %ROOT%%restort_name%
 echo.
@@ -41,6 +40,6 @@ call git push origin master
 
 
 :ExitApp
-endlocal
 cd /d %SAVE_PATH%
+endlocal
 exit /b
