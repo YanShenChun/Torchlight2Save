@@ -19,9 +19,24 @@ for /f %%i in ('dir /b "%GAME_PATH%\*.restore"') do (
     for %%j in ("_!trim_part!") do set "restort_name=!restore_file:%%~j=!"
 )
 
+cd /d %ROOT%
+echo Syncing files ...
+call git pull
+echo /S /Q %ROOT%\%restort_name%
 rmdir /S /Q %ROOT%\%restort_name%
 mkdir %ROOT%\%restort_name%
-copy /Y "%GAME_PATH%\save\*" %ROOT%\%restort_name%
+echo.
+
+echo copy the new files ...
+xcopy /Y "%GAME_PATH%\*" %ROOT%\%restort_name%>nul
+echo.
+
+call git add -u .
+call git commit -m "commit new changes for %restort_name%"
+echo.
+
+echo upload to the server ...
+call git push origin master
 
 
 :ExitApp
